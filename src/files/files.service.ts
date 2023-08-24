@@ -36,4 +36,17 @@ export class FilesService {
       user: { id: userId },
     });
   }
+
+  async remove(ids: string, userId: number) {
+    const idsArrat = ids.split(',');
+
+    const qb = this.repository.createQueryBuilder('file');
+
+    qb.where('id IN (:...ids) AND userId = :userId ', {
+      ids: idsArrat,
+      userId,
+    });
+
+    return qb.softDelete().execute();
+  }
 }
